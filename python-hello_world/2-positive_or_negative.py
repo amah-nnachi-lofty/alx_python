@@ -12,4 +12,4 @@ if number > 0:
 elif number < 0:   #he elif statement in Python stands for "else if." It is used in conditional statements to test multiple conditions in a sequence
     print("{} is negative".format(number))
 else:
-    print("is zero")
+    print("{} is zero".format(number))
