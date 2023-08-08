@@ -20,4 +20,3 @@ else:
 
 # Print the final output on a single line
 print(output_string)
-print()
