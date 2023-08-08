@@ -6,7 +6,7 @@ number = random.randint(-10000, 10000)
 
 # Calculate the absolute value of the number and get the last digit
 abs_number = abs(number)
-last_digit = abs_number % 10
+last_digit = -(abs_number % 10) if number < 0 else abs_number % 10
 
 # Print the formatted output based on the conditions
 output_string = "Last digit of {} is {}".format(number, last_digit)
