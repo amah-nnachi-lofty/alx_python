@@ -5,8 +5,8 @@ import random
 number = random.randint(-10000, 10000)
 
 # Calculate the absolute value of the number and get the last digit
-abs_number = abs(number)
-last_digit = -(abs_number % 10) if number < 0 else abs_number % 10
+abs_number = abs(number) #: This line calculates the absolute value of the number using the abs() function. This is done to ensure that we are working with a positive value when calculating the last digit.
+last_digit = -(abs_number % 10) if number < 0 else abs_number % 10 # -(abs_number % 10) is used when the number is negative. It calculates the remainder of dividing the absolute value of number by 10 and then negates it. This ensures that the last digit is negative for negative numbers.
 
 # Print the formatted output based on the conditions
 output_string = "Last digit of {} is {}".format(number, last_digit)
@@ -20,3 +20,4 @@ else:
 
 # Print the final output on a single line
 print(output_string)
+print()
