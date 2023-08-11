@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-# 0-add.py
 
 # Import the add function from add_0.py
 from add_0 import add as my_add_function
