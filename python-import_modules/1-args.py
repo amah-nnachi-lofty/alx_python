@@ -10,21 +10,19 @@ def print_arguments(*args):
     
     # If there are no arguments, print a message and return
     if num_args == 0:
-        print("No arguments were passed.")
+        print("0 arguments.")
     else:
         if num_args == 1:
-            args_str = "argument"
+            args_str = "1 argument:"
         else:
             args_str = "arguments"
-        print("Number of {}:".format(args_str), num_args)
+        print("{}".format(args_str), num_args)
         for i, arg in enumerate(args, start=1):
-            print("Argument {}:".format(i), arg)
+            print("{}:".format(i), arg)
 
 if __name__ == "__main__":
     # Test the function with command-line arguments
     args = sys.argv[1:]  # Exclude the script name from arguments
     # Call print_arguments function with command-line arguments
     # Test the function with various arguments
-    print_arguments(1, 2, 3)
-    print_arguments("apple", "banana", "cherry", "date")
-    print_arguments(3.14, True, None)
+    print_arguments(*args)
