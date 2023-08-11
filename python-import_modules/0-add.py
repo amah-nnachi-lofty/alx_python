@@ -11,7 +11,3 @@ def main():
     result = add_0.add(a, b)
     # Display the result using string formatting
     print("{} + {} = {}".format(a, b, result))
-
-#  Ensures that the main() function is only executed when the script is run directly
-if __name__ == "__main__":
-    main()
