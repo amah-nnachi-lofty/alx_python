@@ -1,3 +1,5 @@
+#!/usr/bin/python3
 """ This module defines the BaseGeometry class. """ 
-class BaseGeometry: pass
-""" Empty class representing a basic geometry. """
+class BaseGeometry: 
+    """ Empty class representing a basic geometry. """
+    pass
