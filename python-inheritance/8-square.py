@@ -92,6 +92,12 @@ class Square(Rectangle):
         super().__init__(size, size)
         self.__size = size
 
+    def area(self):
+        """
+        Calculate the area of the square.
+        """
+        return self.__size ** 2
+
     def __str__(self):
         """
         Return a string representation of the square.
@@ -102,4 +108,4 @@ if __name__ == "__main__":
     s = Square(4)
     print(s)
     print(dir(s))
-    print(s.area())
+    print(s.area() == 16)
