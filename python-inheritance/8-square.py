@@ -4,23 +4,11 @@
 This module defines the BaseGeometry class and a metaclass BaseMetaClass.
 """
 
-class BaseMetaClass(type):
-    """
-    Metaclass that customizes the behavior of the dir() function.
-    It excludes the '__init_subclass__' attribute from the result.
-    """
-    def __dir__(cls):
-        """
-        Return a list of attributes of the class, excluding '__init_subclass__'.
-        """
-        return [attr for attr in super().__dir__() if attr != '__init_subclass__']
-
 class BaseGeometry(metaclass=BaseMetaClass):
     """
     Base class for geometry-related classes, using BaseMetaClass metaclass.
     It excludes the '__init_subclass__' attribute from the result of dir().
     """
-
     def __dir__(self):
         """
         Return a list of attributes of the class, excluding '__init_subclass__'.
@@ -48,9 +36,6 @@ class BaseGeometry(metaclass=BaseMetaClass):
         if value <= 0:
             raise ValueError("{} must be greater than 0".format(name))
 
-"""
-Module for Rectangle class.
-"""
 class Rectangle(BaseGeometry):
     """
     Rectangle class that inherits from BaseGeometry.
@@ -77,12 +62,9 @@ class Rectangle(BaseGeometry):
         """
         return "[Rectangle] {}/{}".format(self.__width, self.__height)
 
-"""
-Module for Square class.
-"""
 class Square(Rectangle):
     """
-    Square class that inherits from Rectangle.
+    Square class that inherits directly from Rectangle.
     """
 
     def __init__(self, size):
@@ -104,8 +86,3 @@ class Square(Rectangle):
         Calculate the area of the square.
         """
         return self.__size ** 2
-
-if __name__ == "__main__":
-    s = Square(4)
-    print(s)
-    print(issubclass(Square, Rectangle))
