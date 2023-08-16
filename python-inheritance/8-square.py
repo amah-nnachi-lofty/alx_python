@@ -83,7 +83,7 @@ Square = __import__('8-square').Square
 r = Rectangle(5, 10)
 s = Square(13)
 
-print(issubclass(Square, Rectangle))  # This should print True
-print(isinstance(r, Rectangle))  # This should print True
-print(isinstance(s, Square))  # This should print True
-print(isinstance(s, Rectangle))  # This should print True
+"""
+This should print True
+"""
+print(issubclass(Square, Rectangle))
