@@ -97,3 +97,8 @@ class Square(Rectangle):
         Calculate the area of the square.
         """
         return self.__size ** 2
+
+if __name__ == "__main__":
+    s = Square(4)
+    print(s)
+    print(issubclass(Square, Rectangle))
