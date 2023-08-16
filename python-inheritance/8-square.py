@@ -90,15 +90,9 @@ class Square(Rectangle):
         """
         Return a string representation of the square.
         """
-        return "[Rectangle] {}/{}".format(self.__size, self.__size)
-
-    def area(self):
-        """
-        Calculate the area of the square.
-        """
-        return self.__size ** 2
+        return "[Square] {}/{}".format(self.__size, self.__size)
 
 if __name__ == "__main__":
-    s = Square(13)
+    s = Square(4)
     print(s)
     print(issubclass(Square, Rectangle))
