@@ -48,6 +48,10 @@ class BaseGeometry(metaclass=BaseMetaClass):
         if value <= 0:
             raise ValueError("{} must be greater than 0".format(name))
 
+BaseGeometry = __import__('5-base_geometry').BaseGeometry
+"""
+Module for Rectangle class.
+"""
 class Rectangle(BaseGeometry):
     """
     Rectangle class that inherits from BaseGeometry.
