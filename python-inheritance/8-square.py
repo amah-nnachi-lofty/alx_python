@@ -109,3 +109,4 @@ if __name__ == "__main__":
     print(s)
     print(dir(s))
     print(s.area() == 16)
+    print(issubclass(Square, Rectangle))
