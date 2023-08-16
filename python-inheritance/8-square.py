@@ -78,16 +78,12 @@ Module for Square class that inherits from Rectangle.
 """
 
 Rectangle = __import__('7-rectangle').Rectangle
+Square = __import__('8-square').Square
 
-class Square(Rectangle):
-    """
-    Square class that inherits from Rectangle.
-    """
+r = Rectangle(5, 10)
+s = Square(13)
 
-    def __init__(self, size):
-        """
-        Initialize the Square with size.
-        """
-        self.integer_validator("size", size)
-        super().__init__(size, size)
-        self.__size = size
+print(issubclass(Square, Rectangle))  # This should print True
+print(isinstance(r, Rectangle))  # This should print True
+print(isinstance(s, Square))  # This should print True
+print(isinstance(s, Rectangle))  # This should print True
