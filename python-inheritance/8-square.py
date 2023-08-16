@@ -108,4 +108,4 @@ class Square(Rectangle):
 if __name__ == "__main__":
     s = Square(4)
     print(s)
-    print(isinstance(s, Rectangle))
+    print(issubclass(Square, Rectangle))
