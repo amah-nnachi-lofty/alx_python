@@ -61,3 +61,8 @@ class Rectangle(BaseGeometry):
         self.integer_validator("height", height)
         self.__width = width
         self.__height = height
+        
+if __name__ == "__main__":
+    r = Rectangle(3, 5)
+    print(r)
+    print(dir(r))
