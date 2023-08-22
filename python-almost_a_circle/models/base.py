@@ -1,37 +1,32 @@
-#!/usr/bin/python3
+
 
 """
-This module defines the Base class.
-
-The Base class has a private class attribute `__nb_objects` and a public instance attribute `id`.
-
+This module defines the Base class that provides a basic structure for other classes.
 """
 
 class Base:
-  """
-  This class represents a base class.
-
-  Args:
-    id (int, optional): The id of the object. Defaults to None.
-  """
-
-  __nb_objects = 0
-
-  def __init__(self, id=None):
     """
-    Constructor of the Base class.
+    The Base class serves as a foundation for other classes.
 
-    Args:
-      id (int, optional): The id of the object. Defaults to None.
+    Attributes:
+        __nb_objects (int): A private class attribute that keeps track of the number of instances created.
+        id (int): A public instance attribute that stores the unique identifier of an instance.
     """
+    __nb_objects = 0
 
-    """ Check if the id parameter is not None """
-    if id is not None:
-      """ Assign the value of the id parameter to the id attribute """
-      self.id = id
-    else:
-      """ Increment the value of the __nb_objects attribute by 1 """
-      self.id = Base.__nb_objects
-      """ Assign the new value of the __nb_objects attribute to the id attribute """
-      Base.__nb_objects += 1
+    def __init__(self, id=None):
+        """
+        Initializes a new instance of the Base class.
 
+        Args:
+            id (int, optional): An optional integer identifier for the instance.
+                If not provided, the instance is assigned a unique identifier based on __nb_objects.
+        """
+        if id is not None:
+            """ Assign provided id to instance attribute id """
+            self.id = id  
+        else:
+            """ Increment __nb_objects """
+            Base.__nb_objects += 1  
+            """ Assign new value to instance attribute id """
+            self.id = Base.__nb_objects  
