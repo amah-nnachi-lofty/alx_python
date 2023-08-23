@@ -6,6 +6,7 @@ This module defines the Square class, a specialized rectangle shape with equal s
 
 from models.rectangle import Rectangle
 
+
 class Square(Rectangle):
     """
     The Square class represents a square shape.
@@ -57,6 +58,10 @@ class Square(Rectangle):
             **kwargs: The keyword arguments to update specific attributes.
         """
         super().update(*args, **kwargs)
+
+        # The `size` attribute takes precedence over the `width` attribute.
+        if "size" in kwargs:
+            self.width = self.height = kwargs["size"]
 
     def area(self):
         """
