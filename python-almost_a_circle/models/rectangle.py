@@ -1,25 +1,34 @@
-'''
-Module containing the Rectangle class that inherits from Base.
-'''
+#!/usr/bin/python3
+
+"""
+This module defines the Rectangle class.
+"""
 
 from models.base import Base
 
 
 class Rectangle(Base):
     """
-    Rectangle class that inherits from Base.
+    The Rectangle class represents a rectangle shape.
+
+    Attributes:
+        width (int): The width of the rectangle.
+        height (int): The height of the rectangle.
+        x (int): The x-coordinate of the top-left corner of the rectangle.
+        y (int): The y-coordinate of the top-left corner of the rectangle.
+        id (int): A unique identifier for the rectangle instance.
     """
 
     def __init__(self, width, height, x=0, y=0, id=None):
         """
-        Initializes a Rectangle instance.
+        Initializes a new instance of the Rectangle class.
 
         Args:
             width (int): The width of the rectangle.
             height (int): The height of the rectangle.
-            x (int): The x-coordinate of the rectangle.
-            y (int): The y-coordinate of the rectangle.
-            id (int): The unique ID of the rectangle.
+            x (int, optional): The x-coordinate of the top-left corner (default: 0).
+            y (int, optional): The y-coordinate of the top-left corner (default: 0).
+            id (int, optional): A unique identifier for the instance (default: generated).
         """
         super().__init__(id)
         self.width = width
@@ -101,18 +110,19 @@ class Rectangle(Base):
         '''
         Returns a string representation of the rectangle
         '''
-        return ("[Rectangle] ({}) {}/{} - {}/{}"
-                .format(self.id, self.x, self.y, self.width, self.height))
+        return ("[Rectangle] ({}) {}/{} - {}/{}".format(self.id, self.x, self.y, self.width, self.height))
 
     def update(self, *args, **kwargs):
         """Updates the attributes of this object with new values passed as arguments to this function
+        
         Args:
         *args: Variable length argument list containing attributes in order:
-            - 1st argument: id attribute
-            - 2nd argument: width attribute
-            - 3rd argument: height attribute
-            - 4th argument: x attribute
-            - 5th argument: y attribute
+            1st argument: id attribute
+            2nd argument: width attribute
+            3rd argument: height attribute
+            4th argument: x attribute
+            5th argument: y attribute
+
         **kwargs: Variable length keyword argument list containing attribute names and values.    
         """
 
