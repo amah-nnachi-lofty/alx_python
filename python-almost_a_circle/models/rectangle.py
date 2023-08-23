@@ -37,22 +37,17 @@ class Rectangle(Base):
 
     # Other methods...
 
-    def update(self, *args, **kwargs):
+    def update(self, *args):
         """
         Updates the attributes of the rectangle instance with the provided arguments.
 
         Args:
-            *args: The positional arguments in the order: id, width, height, x, y.
-            **kwargs: The keyword arguments to update specific attributes.
+            *args: The arguments in the order: id, width, height, x, y.
         """
-        if args and len(args) > 0:
+        if args:
             attributes = ['id', 'width', 'height', 'x', 'y']
             for attr, value in zip(attributes, args):
                 setattr(self, attr, value)
-        elif kwargs:
-            for key, value in kwargs.items():
-                if hasattr(self, key):
-                    setattr(self, key, value)
 
     def __str__(self):
         """Returns a custom string representation of the rectangle."""
