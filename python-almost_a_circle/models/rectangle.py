@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 """
 This module defines the Rectangle class.
 """
@@ -29,11 +27,11 @@ class Rectangle(Base):
             y (int, optional): The y-coordinate of the top-left corner (default: 0).
             id (int, optional): A unique identifier for the instance (default: generated).
         """
-        super().__init__(id)  # Call the base class's constructor with the provided id
-        self.__width = width
-        self.__height = height
-        self.__x = x
-        self.__y = y
+        super().__init__(id)
+        self.width = width
+        self.height = height
+        self.x = x
+        self.y = y
 
     @property
     def width(self):
@@ -90,3 +88,7 @@ class Rectangle(Base):
         if value < 0:
             raise ValueError("y must be >= 0")
         self.__y = value
+
+    def area(self):
+        """Calculates and returns the area of the rectangle."""
+        return self.__width * self.__height
