@@ -105,3 +105,23 @@ class Rectangle(Base):
     def __str__(self):
         """Returns a custom string representation of the rectangle."""
         return "[Rectangle] ({}) {}/{} - {}/{}".format(self.id, self.__x, self.__y, self.__width, self.__height)
+    
+    def update(self, *args):
+        """
+        Updates the attributes of the rectangle instance with provided arguments.
+
+        Args:
+            args: A variable number of arguments to update the attributes.
+                  The order of arguments should be: [id, width, height, x, y].
+        """
+        num_args = len(args)
+        if num_args > 0:
+            self.id = args[0]
+        if num_args > 1:
+            self.width = args[1]
+        if num_args > 2:
+            self.height = args[2]
+        if num_args > 3:
+            self.x = args[3]
+        if num_args > 4:
+            self.y = args[4]
