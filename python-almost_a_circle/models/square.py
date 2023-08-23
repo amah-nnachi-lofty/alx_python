@@ -38,6 +38,16 @@ class Square(Rectangle):
         """
         return "[Square] ({}) {}/{} - {}".format(self.id, self.x, self.y, self.width)
 
+    def update(self, *args, **kwargs):
+        """
+        Updates the attributes of the square instance with the provided arguments.
+
+        Args:
+            *args: The positional arguments in the order: id, size, x, y.
+            **kwargs: The keyword arguments to update specific attributes.
+        """
+        super().update(*args, **kwargs)
+
     def area(self):
         """
         Calculates and returns the area of the square.
