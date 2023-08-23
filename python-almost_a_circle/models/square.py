@@ -46,6 +46,16 @@ class Square(Rectangle):
             raise ValueError("y must be >= 0")
 
         super().__init__(size, size, x, y, id)
+        
+    @property
+    def size(self):
+        """Getter for the size attribute."""
+        return self.width  # Since size and width are equal for a square
+
+    @size.setter
+    def size(self, value):
+        """Setter for the size attribute."""
+        self.width = self.height = value  # Set both width and height to the same value
 
 
     def __str__(self):
