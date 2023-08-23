@@ -29,12 +29,19 @@ class Square(Rectangle):
             id (int, optional): A unique identifier for the instance (default: generated).
 
         Raises:
+            TypeError: If size, x, or y are not integers.
             ValueError: If size, x, or y are not greater than or equal to 0.
         """
-        if size < 0:
-            raise ValueError("size must be >= 0")
+        if not isinstance(size, int):
+            raise TypeError("size must be an integer")
+        if size <= 0:
+            raise ValueError("size must be > 0")
+        if not isinstance(x, int):
+            raise TypeError("x must be an integer")
         if x < 0:
             raise ValueError("x must be >= 0")
+        if not isinstance(y, int):
+            raise TypeError("y must be an integer")
         if y < 0:
             raise ValueError("y must be >= 0")
 
@@ -60,8 +67,9 @@ class Square(Rectangle):
         super().update(*args, **kwargs)
 
         # The `size` attribute takes precedence over the `width` attribute.
-        if "size" in kwargs:
+        if "size" in kwargs and isinstance(kwargs["size"], int):
             self.width = self.height = kwargs["size"]
+
 
     def area(self):
         """
