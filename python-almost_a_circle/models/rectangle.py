@@ -35,36 +35,52 @@ class Rectangle(Base):
         self.x = x
         self.y = y
 
-    # ... (rest of the class remains the same)
-
+    def __str__(self):
+        """Returns a custom string representation of the rectangle."""
+        return "[Rectangle] ({}) {}/{} - {}/{}".format(self.id, self.x, self.y, self.width, self.height)
+    
     def update(self, *args, **kwargs):
-        """
-        Updates the attributes of the rectangle instance with provided arguments.
-
+        """Updates the attributes of this object with new values passed as arguments to this function
+        
+        Thus, Updates the attributes of the rectangle instance with provided arguments.
         Args:
-            args: A variable number of no-keyword arguments to update the attributes.
-                  The order of arguments should be: [id, width, height, x, y].
-            kwargs: Keyword arguments to update the attributes.
-                    Attributes are updated based on key/value pairs.
+        *args: Variable length argument list containing attributes in order:
+            - 1st argument: id attribute
+            - 2nd argument: width attribute
+            - 3rd argument: height attribute
+            - 4th argument: x attribute
+            - 5th argument: y attribute
+        **kwargs: Variable length keyword argument list containing attribute names and values.    
 
         Note:
             If both no-keyword arguments and keyword arguments are provided,
             the no-keyword arguments take precedence in updating the attributes.
         """
-        if args and len(args) > 0:
-            self.id = args[0]
-        if args and len(args) > 1:
-            self.width = args[1]
-        if args and len(args) > 2:
-            self.height = args[2]
-        if args and len(args) > 3:
-            self.x = args[3]
-        if args and len(args) > 4:
-            self.y = args[4]
-        if not args:
-            for key, value in kwargs.items():
-                setattr(self, key, value)
 
-    def __str__(self):
-        """Returns a custom string representation of the rectangle."""
-        return "[Rectangle] ({}) {}/{} - {}/{}".format(self.id, self.x, self.y, self.width, self.height)
+        attributes = ['id', 'width', 'height', 'x', 'y']
+
+        if args:
+            for index, value in enumerate(args):
+                if index < len(attributes):
+                    setattr(self, attributes[index], value)
+
+        if kwargs:
+            for key, value in kwargs.items():
+                if key in attributes:
+                    setattr(self, key, value)
+
+if __name__ == "__main__":
+    r1 = Rectangle(10, 10, 10, 10)
+    print(r1)
+
+    r1.update(height=1)
+    print(r1)
+
+    r1.update(width=1, x=2)
+    print(r1)
+
+    r1.update(y=1, width=2, x=3, id=89)
+    print(r1)
+
+    r1.update(x=1, height=2, y=3, width=4)
+    print(r1)
