@@ -35,93 +35,52 @@ class Rectangle(Base):
         self.x = x
         self.y = y
 
-    @property
-    def width(self):
-        """Getter method for width attribute."""
-        return self.__width
+    # ... (rest of the class remains the same)
 
-    @width.setter
-    def width(self, value):
-        """Setter method for width attribute."""
-        if not isinstance(value, int):
-            raise TypeError("width must be an integer")
-        if value <= 0:
-            raise ValueError("width must be > 0")
-        self.__width = value
-
-    @property
-    def height(self):
-        """Getter method for height attribute."""
-        return self.__height
-
-    @height.setter
-    def height(self, value):
-        """Setter method for height attribute."""
-        if not isinstance(value, int):
-            raise TypeError("height must be an integer")
-        if value <= 0:
-            raise ValueError("height must be > 0")
-        self.__height = value
-
-    @property
-    def x(self):
-        """Getter method for x attribute."""
-        return self.__x
-
-    @x.setter
-    def x(self, value):
-        """Setter method for x attribute."""
-        if not isinstance(value, int):
-            raise TypeError("x must be an integer")
-        if value < 0:
-            raise ValueError("x must be >= 0")
-        self.__x = value
-
-    @property
-    def y(self):
-        """Getter method for y attribute."""
-        return self.__y
-
-    @y.setter
-    def y(self, value):
-        """Setter method for y attribute."""
-        if not isinstance(value, int):
-            raise TypeError("y must be an integer")
-        if value < 0:
-            raise ValueError("y must be >= 0")
-        self.__y = value
-
-    def area(self):
-        """Calculates and returns the area of the rectangle."""
-        return self.__width * self.__height
-
-    def display(self):
-        """Displays a visual representation of the rectangle using '#' characters."""
-        for _ in range(self.__y):
-            print()
-        for _ in range(self.__height):
-            print(" " * self.__x + "#" * self.__width)
-
-    def __str__(self):
-        """Returns a custom string representation of the rectangle."""
-        return "[Rectangle] ({}) {}/{} - {}/{}".format(self.id, self.__x, self.__y, self.__width, self.__height)
-    
-    def update(self, *args):
+    def update(self, *args, **kwargs):
         """
         Updates the attributes of the rectangle instance with provided arguments.
 
         Args:
-            args: A variable number of arguments to update the attributes.
+            args: A variable number of no-keyword arguments to update the attributes.
                   The order of arguments should be: [id, width, height, x, y].
+            kwargs: Keyword arguments to update the attributes.
+                    Attributes are updated based on key/value pairs.
+
+        Note:
+            If both no-keyword arguments and keyword arguments are provided,
+            the no-keyword arguments take precedence in updating the attributes.
         """
-        num_args = len(args)
-        if num_args > 0:
+        if args and len(args) > 0:
             self.id = args[0]
-        if num_args > 1:
+        if args and len(args) > 1:
             self.width = args[1]
-        if num_args > 2:
+        if args and len(args) > 2:
             self.height = args[2]
-        if num_args > 3:
+        if args and len(args) > 3:
             self.x = args[3]
-        if num_args > 4:
+        if args and len(args) > 4:
             self.y = args[4]
+        if not args:
+            for key, value in kwargs.items():
+                setattr(self, key, value)
+
+    def __str__(self):
+        """Returns a custom string representation of the rectangle."""
+        return "[Rectangle] ({}) {}/{} - {}/{}".format(self.id, self.x, self.y, self.width, self.height)
+
+if __name__ == "__main__":
+    r1 = Rectangle(10, 10, 10, 10)
+    print(r1)
+
+    r1.update(height=1)
+    print(r1)
+
+    r1.update(width=1, x=2)
+    print(r1)
+
+    r1.update(y=1, width=2, x=3, id=89)
+    print(r1)
+
+    r1.update(x=1, height=2, y=3, width=4)
+    print(r1)
