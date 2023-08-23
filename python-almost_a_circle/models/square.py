@@ -32,7 +32,7 @@ class Square(Rectangle):
             TypeError: If size, x, or y are not integers.
             ValueError: If size, x, or y are not greater than or equal to 0.
         """
-        if not isinstance(size, int):
+        if not isinstance(x, y, int):
             raise TypeError("size must be an integer")
         if size <= 0:
             raise ValueError("size must be > 0")
