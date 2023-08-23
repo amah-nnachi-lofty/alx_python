@@ -26,7 +26,17 @@ class Square(Rectangle):
             x (int, optional): The x-coordinate of the top-left corner (default: 0).
             y (int, optional): The y-coordinate of the top-left corner (default: 0).
             id (int, optional): A unique identifier for the instance (default: generated).
+
+        Raises:
+            TypeError: If size, x, or y are not integers.
         """
+        if type(size) is not int:
+            raise TypeError("size must be an integer")
+        if type(x) is not int:
+            raise TypeError("x must be an integer")
+        if type(y) is not int:
+            raise TypeError("y must be an integer")
+
         super().__init__(size, size, x, y, id)
 
     def __str__(self):
