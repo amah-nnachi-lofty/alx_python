@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 
+"""
+This module defines the Square class, a specialized rectangle shape with equal sides.
+"""
+
 from models.rectangle import Rectangle
 
 class Square(Rectangle):
