@@ -9,7 +9,7 @@ class Base:
     The Base class serves as a foundation for other classes.
 
     Attributes:
-        __nb_objects (int): A private class attribute that keeps track of the number of instances created.
+        __nb_objects (int): A private class attribute that keeps track of the number of instances created and initializes it with the value 0.
         id (int): A public instance attribute that stores the unique identifier of an instance.
     """
     __nb_objects = 0
