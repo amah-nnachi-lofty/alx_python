@@ -5,43 +5,34 @@ Write a Python script that takes in a URL, sends a request to the URL and displa
 import requests
 import sys
 
-def get_request_id(url):
-  """Sends a request to the specified URL and returns the value of the `X-Request-Id` header in the response.
+def get_x_request_id(url):
+    """
+    Sends a GET request to the specified URL and displays the value of the X-Request-Id header.
 
-  Args:
-    url: The URL to send a request to.
+    Args:
+        url (str): The URL to send the request to.
 
-  Returns:
-    The value of the `X-Request-Id` header in the response, or `None` if the header is not present.
-  """
+    Example:
+        python script.py https://example.com
+    """
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an exception if the request was not successful
 
-  response = requests.get(url)
-  x_request_id = response.headers.get('X-Request-Id')
-  return x_request_id
+        # Check if the 'X-Request-Id' header is present in the response
+        if 'X-Request-Id' in response.headers:
+            x_request_id = response.headers['X-Request-Id']
+            print(f"The value of X-Request-Id header is: {x_request_id}")
+        else:
+            print("X-Request-Id header is not present in the response.")
+    except requests.exceptions.RequestException as e:
+        print(f"Request Exception: {e}")
+        sys.exit(1)
 
-def main():
-  """Takes in a URL from the user, sends a request to the URL, and displays the value of the `X-Request-Id` header in the response."""
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python script.py <URL>")
+        sys.exit(1)
 
-  url = input('Enter a URL: ')
-
-  # Check if the URL is empty
-  if not url:
-    print('No URL entered.')
-    sys.exit(1)
-
-  # Strip whitespace from the URL
-  url = url.strip()
-
-  # Correct spelling errors in the URL
-  if url == 'Holberton school':
-    url = 'Holberton School'
-
-  x_request_id = get_request_id(url)
-
-  if x_request_id is not None:
-    print('The value of the `X-Request-Id` header in the response is: {}'.format(x_request_id))
-  else:
-    print('The `X-Request-Id` header is not present in the response.')
-
-if __name__ == '__main__':
-  main()
+    url = sys.argv[1]
+    get_x_request_id(url)
