@@ -14,50 +14,36 @@ def fetch_status(url):
         url (str): The URL to fetch status information from.
 
     Returns:
-        dict: A dictionary containing the status information, or None on failure.
+        str: The response content as a string, or an empty string on failure.
 
     Example:
         status_data = fetch_status("https://alu-intranet.hbtn.io/status")
-        if status_data:
-            print_status(status_data)
+        print_status(status_data)
     """
     try:
         response = requests.get(url)
-        response.raise_for_status()  
-        """Raise an exception if the request was not successful"""
+        response.raise_for_status()  # Raise an exception if the request was not successful
 
-        if response.headers.get('content-type') == 'application/json':
-            data = response.json()
-            return data
-        else:
-            print("Received a non-JSON response.")
-            return None
+        return response.text  # Return the response content as a string
     except requests.exceptions.RequestException as e:
         print(f"Request Exception: {e}")
-        return None
-    except ValueError as e:
-        print(f"ValueError: {e}")
-        return None
+        return ""
 
 def print_status(status_data):
     """
     Displays the status information with tabulation.
 
     Args:
-        status_data (dict): A dictionary containing the status information.
+        status_data (str): The response content as a string.
 
     Example:
         print_status(status_data)
     """
-    if status_data is not None:
-        print("Body response:")
-        print("\t- type:", type(status_data))
-        print("\t- content:", status_data)
-    else:
-        print("Failed to fetch data.")
+    print("Body response:")
+    print("\t- type: <class 'str'>")
+    print("\t- content:", status_data)
 
 if __name__ == "__main__":
     url = "https://alu-intranet.hbtn.io/status"
     status_data = fetch_status(url)
-    if status_data:
-        print_status(status_data)
+    print_status(status_data)
