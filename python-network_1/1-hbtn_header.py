@@ -23,6 +23,19 @@ def main():
   """Takes in a URL from the user, sends a request to the URL, and displays the value of the `X-Request-Id` header in the response."""
 
   url = input('Enter a URL: ')
+
+  # Check if the URL is empty
+  if not url:
+    print('No URL entered.')
+    sys.exit(1)
+
+  # Strip whitespace from the URL
+  url = url.strip()
+
+  # Correct spelling errors in the URL
+  if url == 'Holberton school':
+    url = 'Holberton School'
+
   x_request_id = get_request_id(url)
 
   if x_request_id is not None:
