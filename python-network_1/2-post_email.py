@@ -17,16 +17,16 @@ def send_post_request(url, email):
         email (str): The email address to include as a parameter.
 
     Example:
-        python script.py https://example.com user@example.com
+        python script.py http://0.0.0.0:5050 user@test.com
     """
     try:
-        """ Create a dictionary with the 'email' parameter"""
+        # Create a dictionary with the 'email' parameter
         data = {'email': email}
 
-        """Send a POST request with the data """
+        # Send a POST request with the data
         response = requests.post(url, data=data)
 
-        """ Check for a successful response (status code 200)"""
+        # Check for a successful response (status code 200)
         if response.status_code == 200:
             print("Response Body:")
             print(response.text)
