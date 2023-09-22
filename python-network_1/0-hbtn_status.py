@@ -1,3 +1,9 @@
+"""Fetches the status of the alu-intranet.hbtn.io service and displays the body response in the following format:
+
+Body response:$
+   - type: <class 'str'>$
+   - content: OK$
+"""
 import requests
 
 def fetch_status(url):
@@ -17,7 +23,8 @@ def fetch_status(url):
     """
     try:
         response = requests.get(url)
-        response.raise_for_status()  # Raise an exception if the request was not successful
+        response.raise_for_status()  
+        """Raise an exception if the request was not successful"""
 
         if response.headers.get('content-type') == 'application/json':
             data = response.json()
