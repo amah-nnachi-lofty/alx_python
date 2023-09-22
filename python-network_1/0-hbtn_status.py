@@ -41,7 +41,22 @@ def print_status(status_data):
     """
     print("Body response:")
     print("\t- type: <class 'str'>")
+    """
+    This line uses the print function to output information about the type of the status_data variable. Here's the breakdown:
+
+    \t: This is an escape sequence that represents a tab character. It adds an indentation to make the output visually organized.
+    - type: <class 'str'>: This part of the output indicates that the type of status_data is a string. 
+    The text is formatted as a label ("type") followed by the actual data ("<class 'str'>"). 
+    The use of angle brackets (< and >) is a common convention in Python to indicate the type of an object.
+    """
     print("\t- content:", status_data)
+    """
+    This line uses the print function to display the content of the status_data variable. Here's the breakdown:
+
+    \t: Similar to the previous line, this adds a tab indentation for better readability.
+    - content:: This part of the output is another label ("content") that indicates the data that follows is the content of status_data.
+    status_data: This is the actual content of the status_data variable, which is printed next to the "content" label.
+    """
 
 if __name__ == "__main__":
     url = "https://alu-intranet.hbtn.io/status"
