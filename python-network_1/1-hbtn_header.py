@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 """
 Write a Python script that takes in a URL, sends a request to the URL and displays the value of the variable X-Request-Id in the response header
 """
@@ -5,34 +7,20 @@ Write a Python script that takes in a URL, sends a request to the URL and displa
 import requests
 import sys
 
-def get_x_request_id(url):
-    """
-    Sends a GET request to the specified URL and displays the value of the X-Request-Id header.
+url = sys.argv[1]
+"""
+ sys.argv list contains the command-line arguments passed to the script. 
+ sys.argv[0] is the script's name, and sys.argv[1] is the first argument (in this case, the URL).
+"""
 
-    Args:
-        url (str): The URL to send the request to.
-
-    Example:
-        python script.py https://example.com
-    """
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raise an exception if the request was not successful
-
-        # Check if the 'X-Request-Id' header is present in the response
-        if 'X-Request-Id' in response.headers:
-            x_request_id = response.headers['X-Request-Id']
-            print(f"The value of X-Request-Id header is: {x_request_id}")
-        else:
-            print("X-Request-Id header is not present in the response.")
-    except requests.exceptions.RequestException as e:
-        print(f"Request Exception: {e}")
-        sys.exit(1)
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python script.py <URL>")
-        sys.exit(1)
-
-    url = sys.argv[1]
-    get_x_request_id(url)
+req = requests.get(url)
+"""
+This line sends an HTTP GET request to the URL specified in url using the requests.get() method. 
+The response from the server is stored in the req variable.
+"""
+print(req.headers.get('X-Request-Id'))
+"""
+This accesses the headers of the HTTP response, which is stored in the req variable.
+.get('X-Request-Id'): This method retrieves the value associated with the X-Request-Id header from the response headers.
+It extracts and prints the value of the X-Request-Id header from the response.
+"""
