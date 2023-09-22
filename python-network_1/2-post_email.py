@@ -38,7 +38,7 @@ def send_post_request(url, email):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python script.py <URL> <email>")
+        print("Usage: python 2-post_email.py <URL> <email>")
         sys.exit(1)
 
     url = sys.argv[1]
