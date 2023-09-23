@@ -37,4 +37,4 @@ if __name__ == "__main__":
     access_token = sys.argv[2]
 
     user_id = get_github_user_id(username, access_token)
-    print(f'The GitHub user id for {username} is: {user_id}')
+    print(f'{user_id}')
