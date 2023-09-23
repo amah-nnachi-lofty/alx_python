@@ -25,6 +25,8 @@ def get_github_user_id(username, access_token):
     if response.status_code == 200:
         user_data = response.json()
         return user_data['id']
+    elif response.status_code == 401:
+        return "None"  # Authentication failed
     else:
         raise Exception(f'Error: {response.status_code}')
 
