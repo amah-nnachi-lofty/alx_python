@@ -1,4 +1,4 @@
-# Python - Web framework Taks
+# Python - Web framework Tasks
 
 ## 0. Hello Flask! 
 Write a script that starts a Flask web application:
