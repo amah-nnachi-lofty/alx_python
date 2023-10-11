@@ -10,52 +10,44 @@ Usage:
 import csv
 import requests
 import sys
+import os
 
-# Check if the correct number of command-line arguments is provided
-if len(sys.argv) != 2:
-    print("Usage: python3 0-gather_data_from_an_API.py <employee_id>")
-    sys.exit(1)
+def user_info(employee_id):
+    """
+    Fetches employee's completed tasks and exports the data to CSV.
 
-# Retrieve the employee ID from the command-line argument
-employee_id = sys.argv[1]
+    Args:
+        employee_id (str): Employee ID.
+    """
+    url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
+    response = requests.get(url)
+    todos = response.json()
 
-# Fetch employee details using the provided employee ID
-url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
-response = requests.get(url)
-employee_name = response.json().get("username")
+    if not todos:
+        print(f"No data available for employee with ID {employee_id}")
+        return
+    
+    # Ensure the CSV file exists or create a new one
+    csv_filename = f'{employee_id}.csv'
+    header = ['Task ID', 'Employee ID', 'Employee Name', 'Completed', 'Task Title']
+    file_exists = os.path.exists(csv_filename)
+    with open(csv_filename, 'a', newline='') as csvfile:
+        csv_writer = csv.writer(csvfile)
+        # Write header only if the file is newly created
+        if not file_exists:
+            csv_writer.writerow(header)
 
-# Verify if the employee exists; exit if not found
-if not employee_name:
-    print(f"No employee found with ID {employee_id}")
-    sys.exit(1)
+        # Write tasks to the CSV file
+        for todo in todos:
+            csv_writer.writerow([todo.get('id'), employee_id, todo.get("userId"), todo.get("completed"), todo.get("title")])
 
-# Fetch the employee's TODO list from the API
-url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
-response = requests.get(url)
-todos = response.json()
+    print(f"Data exported to {csv_filename}")
 
-# Calculate the total number of tasks and completed tasks
-total_tasks = len(todos)
-done_tasks = sum(1 for todo in todos if todo.get("completed"))
-
-# Display progress information
-print(f"Employee {employee_name} is done with tasks({done_tasks}/{total_tasks}):")
-
-# Display titles of completed tasks
-for todo in todos:
-    if todo.get("completed"):
-        print(f"\t{todo.get('title')}")
-
-# Export data to CSV file
-csv_filename = f'{employee_id}.csv'
-with open(csv_filename, 'w', newline='') as csvfile:
-    csv_writer = csv.writer(csvfile, delimiter=',',
-                            quotechar='"', quoting=csv.QUOTE_ALL)
-    # Write tasks to the CSV file
-    for todo in todos:
-        csv_writer.writerow([todo.get('id'), employee_id, employee_name,
-                             todo.get("completed"), todo.get("title")])
-
-print(f"Data exported to {csv_filename}")
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python3 0-gather_data_from_an_API.py <employee_id>")
+    else:
+        employee_id = sys.argv[1]
+        user_info(employee_id)
 
 
