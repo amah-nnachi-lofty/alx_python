@@ -1,96 +1,61 @@
 """
-A Python 3 script that uses the requests module to gather information about an employee's
-TODO list progress, given the employee ID.
-
-This script is modified to export the data to a CSV file in the following format:
-
-"USER_ID","USERNAME","TASK_COMPLETED_STATUS","TASK_TITLE"
-
-The file name will be `USER_ID.csv`.
+This script fetches and displays a specified employee's completed tasks
+from the JSONPlaceholder API. It takes an employee ID as a command-line
+argument and prints the total number of completed tasks along with their titles.
 
 Usage:
-
-    python 1-export_to_CSV.py EMPLOYEE_ID
+    python3 0-gather_data_from_an_API.py <employee_id>
 """
 
 import csv
 import requests
+import sys
 
+# Check if the correct number of command-line arguments is provided
+if len(sys.argv) != 2:
+    print("Usage: python3 0-gather_data_from_an_API.py <employee_id>")
+    sys.exit(1)
 
-def get_employee_todo_items(employee_id: int) -> list:
-    """
-    Gets the TODO list items for an employee.
+# Retrieve the employee ID from the command-line argument
+employee_id = sys.argv[1]
 
-    Args:
-        employee_id: The employee ID.
+# Fetch employee details using the provided employee ID
+url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
+response = requests.get(url)
+employee_name = response.json().get("username")
 
-    Returns:
-        A list of dictionaries, where each dictionary represents a TODO list item.
-    """
+# Verify if the employee exists; exit if not found
+if not employee_name:
+    print(f"No employee found with ID {employee_id}")
+    sys.exit(1)
 
-    url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
-    response = requests.get(url)
-    response.raise_for_status()
-    todo_items = response.json()
-    return todo_items
+# Fetch the employee's TODO list from the API
+url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
+response = requests.get(url)
+todos = response.json()
 
+# Calculate the total number of tasks and completed tasks
+total_tasks = len(todos)
+done_tasks = sum(1 for todo in todos if todo.get("completed"))
 
-def get_employee_details(employee_id: int) -> dict:
-    """
-    Gets the employee details for an employee.
+# Display progress information
+print(f"Employee {employee_name} is done with tasks({done_tasks}/{total_tasks}):")
 
-    Args:
-        employee_id: The employee ID.
+# Display titles of completed tasks
+for todo in todos:
+    if todo.get("completed"):
+        print(f"\t{todo.get('title')}")
 
-    Returns:
-        A dictionary representing the employee details.
-    """
+# Export data to CSV file
+csv_filename = f'{employee_id}.csv'
+with open(csv_filename, 'w', newline='') as csvfile:
+    csv_writer = csv.writer(csvfile, delimiter=',',
+                            quotechar='"', quoting=csv.QUOTE_ALL)
+    # Write tasks to the CSV file
+    for todo in todos:
+        csv_writer.writerow([todo.get('id'), employee_id, employee_name,
+                             todo.get("completed"), todo.get("title")])
 
-    url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
-    response = requests.get(url)
-    response.raise_for_status()
-    employee_details = response.json()
-    return employee_details
+print(f"Data exported to {csv_filename}")
 
-
-def export_employee_todo_list_to_csv(employee_id: int, filename: str):
-    """
-    Exports the employee's TODO list to a CSV file.
-
-    Args:
-        employee_id: The employee ID.
-        filename: The name of the CSV file.
-    """
-
-    with open(filename, "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
-
-        todo_items = get_employee_todo_items(employee_id)
-        employee_details = get_employee_details(employee_id)
-
-        for todo_item in todo_items:
-            writer.writerow([
-                employee_id,
-                employee_details["name"],
-                todo_item["completed"],
-                todo_item["title"],
-            ])
-
-
-def main():
-    """
-    The main function.
-    """
-
-    employee_id = int(input("Enter the employee ID: "))
-
-    filename = f"{employee_id}.csv"
-    export_employee_todo_list_to_csv(employee_id, filename)
-
-    print(f"Successfully exported employee TODO list to CSV file: {filename}")
-
-
-if __name__ == "__main__":
-    main()
 
