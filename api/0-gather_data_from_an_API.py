@@ -1,64 +1,49 @@
 """
-Write a Python script that, using this REST API, for a given employee ID, returns information about his/her TODO list progress
+This script interacts with the JSONPlaceholder API to retrieve and display
+a specified employee's completed tasks. It takes an employee ID as a command-
+line argument and prints the total number of completed tasks along with
+their titles.
+
+Usage:
+    python gather_data_from_an_API.py <employee_id>
 """
+
 import requests
 import sys
 
-def get_employee_data(employee_id):
-    """
-    Get employee data from the given employee ID using JSONPlaceholder API.
+# Base URL for the JSONPlaceholder API
+BASE_URL = "https://jsonplaceholder.typicode.com"
+# Retrieve employee ID from command-line argument
+EMPLOYEE_ID = sys.argv[1]
 
-    Args:
-        employee_id (int): The ID of the employee.
+# Fetch employee details using the provided employee ID
+EMPLOYEE_URL = f"{BASE_URL}/users/{EMPLOYEE_ID}"
+EMPLOYEE_RESPONSE = requests.get(EMPLOYEE_URL)
+EMPLOYEE_DATA = EMPLOYEE_RESPONSE.json()
 
-    Returns:
-        dict: Employee data in JSON format.
-    """
-    url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
-    response = requests.get(url)
-    return response.json()
+# Check if the employee exists
+if 'name' not in EMPLOYEE_DATA:
+    print("Employee not found.")
+    sys.exit(1)
 
-def get_todo_list(employee_id):
-    """
-    Get TODO list data for the given employee ID using JSONPlaceholder API.
+# Extract employee name from the retrieved data
+EMPLOYEE_NAME = EMPLOYEE_DATA.get('name')
 
-    Args:
-        employee_id (int): The ID of the employee.
+# Fetch the TODO list for the specified employee
+TODO_URL = f"{BASE_URL}/users/{EMPLOYEE_ID}/todos"
+TODO_RESPONSE = requests.get(TODO_URL)
+TODO_DATA = TODO_RESPONSE.json()
 
-    Returns:
-        list: TODO list data in JSON format.
-    """
-    url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
-    response = requests.get(url)
-    return response.json()
+# Calculate the total number of tasks and completed tasks
+TOTAL_TASKS = len(TODO_DATA)
+COMPLETED_TASKS = sum(1 for task in TODO_DATA if task.get("completed"))
 
-def gather_employee_progress(employee_id):
-    """
-    Display employee TODO list progress as per the given employee ID.
+# Display progress information
+print(f"Employee {EMPLOYEE_NAME} is done with tasks({COMPLETED_TASKS}/{TOTAL_TASKS}):")
 
-    Args:
-        employee_id (int): The ID of the employee.
-    """
-    employee_data = get_employee_data(employee_id)
-    todo_list = get_todo_list(employee_id)
-
-    completed_tasks = [task for task in todo_list if task['completed']]
-    num_completed_tasks = len(completed_tasks)
-    total_tasks = len(todo_list)
-
-    print(f"Employee {employee_data['name']} is done with tasks "
-            f"({num_completed_tasks}/{total_tasks}):")
-    
-    for task in completed_tasks:
-        print(f"    {task['title']}")
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python gather_data_from_an_API.py <employee_id>")
-    else:
-        try:
-            employee_id = int(sys.argv[1])
-            gather_employee_progress(employee_id)
-        except ValueError:
-            print("Invalid employee ID. Please provide a valid integer ID.")
+# Display titles of completed tasks
+for task in TODO_DATA:
+    if task.get("completed"):
+        formatted_task_title = f"\t{task.get('title')}"
+        print(formatted_task_title)
 
