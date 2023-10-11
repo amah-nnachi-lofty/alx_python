@@ -11,39 +11,63 @@ Usage:
 import requests
 import sys
 
-# Base URL for the JSONPlaceholder API
 BASE_URL = "https://jsonplaceholder.typicode.com"
-# Retrieve employee ID from command-line argument
-EMPLOYEE_ID = sys.argv[1]
 
-# Fetch employee details using the provided employee ID
-EMPLOYEE_URL = f"{BASE_URL}/users/{EMPLOYEE_ID}"
-EMPLOYEE_RESPONSE = requests.get(EMPLOYEE_URL)
-EMPLOYEE_DATA = EMPLOYEE_RESPONSE.json()
+def fetch_employee_data(employee_id):
+    """
+    Fetch employee details from JSONPlaceholder API.
 
-# Check if the employee exists
-if 'name' not in EMPLOYEE_DATA:
-    print("Employee not found.")
-    sys.exit(1)
+    Args:
+        employee_id (str): Employee ID.
 
-# Extract employee name from the retrieved data
-EMPLOYEE_NAME = EMPLOYEE_DATA.get('name')
+    Returns:
+        dict: Employee data in JSON format.
+    """
+    employee_url = f"{BASE_URL}/users/{employee_id}"
+    response = requests.get(employee_url)
+    return response.json()
 
-# Fetch the TODO list for the specified employee
-TODO_URL = f"{BASE_URL}/users/{EMPLOYEE_ID}/todos"
-TODO_RESPONSE = requests.get(TODO_URL)
-TODO_DATA = TODO_RESPONSE.json()
+def fetch_employee_tasks(employee_id):
+    """
+    Fetch employee's TODO list from JSONPlaceholder API.
 
-# Calculate the total number of tasks and completed tasks
-TOTAL_TASKS = len(TODO_DATA)
-COMPLETED_TASKS = sum(1 for task in TODO_DATA if task.get("completed"))
+    Args:
+        employee_id (str): Employee ID.
 
-# Display progress information
-print(f"Employee {EMPLOYEE_NAME} is done with tasks({COMPLETED_TASKS}/{TOTAL_TASKS}):")
+    Returns:
+        list: TODO list data in JSON format.
+    """
+    todo_url = f"{BASE_URL}/users/{employee_id}/todos"
+    response = requests.get(todo_url)
+    return response.json()
 
-# Display titles of completed tasks
-for task in TODO_DATA:
-    if task.get("completed"):
-        formatted_task_title = f"\t{task.get('title')}"
-        print(formatted_task_title)
+def main():
+    """
+    Main function to fetch and display employee TODO list progress.
+    """
+    if len(sys.argv) != 2:
+        print("Usage: python gather_data_from_an_API.py <employee_id>")
+        sys.exit(1)
+
+    employee_id = sys.argv[1]
+    employee_data = fetch_employee_data(employee_id)
+    if 'name' not in employee_data:
+        print("Employee not found.")
+        sys.exit(1)
+
+    employee_name = employee_data.get('name')
+    todo_list = fetch_employee_tasks(employee_id)
+    
+    completed_tasks = [task for task in todo_list if task['completed']]
+    num_completed_tasks = len(completed_tasks)
+    total_tasks = len(todo_list)
+
+    print(f"Employee {employee_name} is done with tasks "
+          f"({num_completed_tasks}/{total_tasks}):")
+    
+    for task in completed_tasks:
+        print(f"    {task['title']}")
+
+if __name__ == "__main__":
+    main()
 
