@@ -1,78 +1,62 @@
 #!/usr/bin/python3
-
 """
-This script fetches and displays a specified employee's completed tasks
-from the JSONPlaceholder API. It takes an employee ID as a command-line
-argument and prints the total number of completed tasks along with their titles.
+Script to export data from an API about an employee's TODO list progress in JSON format.
 
-Usage:
-    python3 0-gather_data_from_an_API.py <employee_id>
+This script uses the requests module to make requests to the API endpoints for
+getting employee details and TODO list items. It then calculates the employee's
+TODO list progress and exports it to a JSON file in the specified format.
+
+Format must be: 
+{ "USER_ID": [
+    {"task": "TASK_TITLE", "completed": TASK_COMPLETED_STATUS, "username": "USERNAME"}, 
+    {"task": "TASK_TITLE", "completed": TASK_COMPLETED_STATUS, "username": "USERNAME"}, 
+    ... 
+]}
+
+Args:
+  employee_id: The integer employee ID.
+
+Returns:
+  None
 """
 
-import csv
-import os
 import requests
+import json
 import sys
 
-def export_to_CSV(user_id):
+def export_to_JSON(employee_id, todos):
     """
-    Fetches completed tasks of a specified employee from the JSONPlaceholder API
-    and exports the data to a CSV file.
+    Export employee's TODO list progress to a JSON file.
 
     Args:
-        user_id (str): The ID of the employee.
+        employee_id (int): The ID of the employee.
+        todos (list): List of employee's TODO tasks.
     """
-    # Get employee name using the provided user ID
-    employee_name = requests.get(
-        "https://jsonplaceholder.typicode.com/users?id={}".format(user_id)
-    ).json()[0]["username"]
+    data = {str(employee_id): []}
+    for todo in todos:
+        task_data = {
+            "task": todo.get("title"),
+            "completed": todo.get("completed"),
+            "username": todo.get("userId")
+        }
+        data[str(employee_id)].append(task_data)
     
-    # Fetch tasks data for the specified employee
-    tasks = requests.get(
-        "https://jsonplaceholder.typicode.com/users/{}/todos".format(user_id)
-    ).json()
-
-    # Prepare the data for CSV export
-    tasks_data = []
-    for task in tasks:
-        tasks_data.append([
-            user_id,
-            employee_name,
-            task["completed"],
-            task["title"],
-        ])
-
-    # Export tasks data to a CSV file named as the user ID
-    with open(str(user_id) + ".csv", "w", encoding="UTF8", newline="") as f:
-        writer = csv.writer(f, quoting=csv.QUOTE_ALL)
-        writer.writerows(tasks_data)
-
-def user_info(id):
-    """
-    Reads and displays data from the CSV file if it exists.
-
-    Args:
-        id (str): The ID of the employee.
-    """
-    # Check if the CSV file exists
-    if not os.path.exists(str(id) + ".csv"):
-        print(f"Error: File {id}.csv not found.")
-        return
-
-    # Open the CSV file for reading
-    with open(str(id) + ".csv", 'r') as f:
-        reader = csv.reader(f)
-        # Process and display data from the CSV file
-        for row in reader:
-            print(", ".join(row))
+    with open(f"{employee_id}.json", "w") as json_file:
+        json.dump(data, json_file, indent=4)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python3 1-export_to_CSV.py <employee_id>")
+        sys.exit(1)
+
+    employee_id = sys.argv[1]
+
+    url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
+    response = requests.get(url)
+    todos = response.json()
+
+    if not todos:
+        print(f"No tasks found for employee ID {employee_id}")
     else:
-        try:
-            employee_id = int(sys.argv[1])
-            export_to_CSV(employee_id)
-            user_info(employee_id)
-        except ValueError:
-            print("Error: Invalid employee ID. Please provide a valid integer.")
+        export_to_JSON(employee_id, todos)
+        print(f"Data exported to {employee_id}.json successfully.")
