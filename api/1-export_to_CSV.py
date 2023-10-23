@@ -20,8 +20,8 @@ Returns:
   None
 """
 
+import csv
 import requests
-import json
 import sys
 
 def export_to_JSON(employee_id, todos):
@@ -42,6 +42,7 @@ def export_to_JSON(employee_id, todos):
         data[str(employee_id)].append(task_data)
     
     with open(f"{employee_id}.json", "w") as json_file:
+        import json
         json.dump(data, json_file, indent=4)
 
 if __name__ == "__main__":
