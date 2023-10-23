@@ -57,7 +57,7 @@ for todo in todos:
     }
     todo_list.append(task_data)
 
-# Create the output dictionary with user ID as the key and TODO list as the value
+# Create the output dictionary with user ID as the key and a list of TODO items as the value
 output_data = {employee_id: todo_list}
 
 # Export data to JSON file
