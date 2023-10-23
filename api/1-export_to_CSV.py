@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 """
 This script fetches and displays a specified employee's completed tasks
 from the JSONPlaceholder API. It takes an employee ID as a command-line
