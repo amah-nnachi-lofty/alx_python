@@ -1,17 +1,13 @@
 #!/usr/bin/python3
 """
-Script to export data from an API about an employee's TODO list progress in JSON format.
+Script to export data from an API about an employee's TODO list progress in CSV format.
 
 This script uses the requests module to make requests to the API endpoints for
 getting employee details and TODO list items. It then calculates the employee's
-TODO list progress and exports it to a JSON file in the specified format.
+TODO list progress and exports it to a CSV file in the specified format.
 
 Format must be: 
-{ "USER_ID": [
-    {"task": "TASK_TITLE", "completed": TASK_COMPLETED_STATUS, "username": "USERNAME"}, 
-    {"task": "TASK_TITLE", "completed": TASK_COMPLETED_STATUS, "username": "USERNAME"}, 
-    ... 
-]}
+"USER_ID","EMPLOYEE_NAME","TASK_TITLE","TASK_COMPLETED_STATUS"
 
 Args:
   employee_id: The integer employee ID.
@@ -24,26 +20,24 @@ import csv
 import requests
 import sys
 
-def export_to_JSON(employee_id, todos):
+def export_to_CSV(employee_id, todos):
     """
-    Export employee's TODO list progress to a JSON file.
+    Export employee's TODO list progress to a CSV file.
 
     Args:
         employee_id (int): The ID of the employee.
         todos (list): List of employee's TODO tasks.
     """
-    data = {str(employee_id): []}
-    for todo in todos:
-        task_data = {
-            "task": todo.get("title"),
-            "completed": todo.get("completed"),
-            "username": todo.get("userId")
-        }
-        data[str(employee_id)].append(task_data)
-    
-    with open(f"{employee_id}.json", "w") as json_file:
-        import json
-        json.dump(data, json_file, indent=4)
+    with open(f"{employee_id}.csv", "w", newline="", encoding="UTF-8") as csv_file:
+        csv_writer = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
+        csv_writer.writerow(["USER_ID", "EMPLOYEE_NAME", "TASK_TITLE", "TASK_COMPLETED_STATUS"])
+
+        employee_name = requests.get(f"https://jsonplaceholder.typicode.com/users/{employee_id}").json().get("name")
+
+        for todo in todos:
+            task_title = todo.get("title")
+            completed_status = str(todo.get("completed"))
+            csv_writer.writerow([employee_id, employee_name, task_title, completed_status])
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -59,5 +53,5 @@ if __name__ == "__main__":
     if not todos:
         print(f"No tasks found for employee ID {employee_id}")
     else:
-        export_to_JSON(employee_id, todos)
-        print(f"Data exported to {employee_id}.json successfully.")
+        export_to_CSV(employee_id, todos)
+        print(f"Data exported to {employee_id}.csv successfully.")
