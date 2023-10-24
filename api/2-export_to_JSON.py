@@ -40,9 +40,9 @@ def export_to_JSON(user_id):
     tasks_data = []
     for task in tasks:
         task_dict = {
-            "task": task["title"],
+            "task": task["title"].strip().lower(),  # Normalize task title
             "completed": task["completed"],
-            "username": employee_name
+            "username": employee_name.strip().lower()  # Normalize username
         }
         tasks_data.append(task_dict)
 
