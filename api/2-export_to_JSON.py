@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 """
 2-export_to_JSON.py Script to export data from an API about an employee's TODO list progress in JSON format.
 
@@ -30,7 +31,6 @@ def export_to_CSV(user_id):
     employee_name = requests.get(
         "https://jsonplaceholder.typicode.com/users/{}".format(user_id)
     ).json()["username"]
-    
     # Make a request to get employee's TODO list from the API
     tasks = requests.get(
         "https://jsonplaceholder.typicode.com/users/{}/todos".format(user_id)
@@ -38,6 +38,7 @@ def export_to_CSV(user_id):
 
     # Prepare the data in the specified format
     tasks_data = {str(user_id): []}
+
     for task in tasks:
         tasks_data[str(user_id)].append(
             {
@@ -55,4 +56,3 @@ def export_to_CSV(user_id):
 if __name__ == "__main__":
     # Get the employee ID from the command-line argument and call the export function
     export_to_CSV(sys.argv[1])
-
