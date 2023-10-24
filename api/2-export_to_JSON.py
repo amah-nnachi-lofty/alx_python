@@ -24,6 +24,10 @@ import json
 import requests
 import sys
 
+# Function to normalize a string (trim spaces and ensure 20 characters)
+def normalize_string(s):
+    return s.strip()[:20]
+
 # Function to export TODO list data to a JSON file
 def export_to_JSON(user_id):
     # Make a request to get employee's name from the API
@@ -40,9 +44,9 @@ def export_to_JSON(user_id):
     tasks_data = []
     for task in tasks:
         task_dict = {
-            "task": task["title"].strip().lower(),  # Normalize task title
+            "task": normalize_string(task["title"]).lower(),  # Normalize and limit to 20 characters
             "completed": task["completed"],
-            "username": employee_name.strip().lower()  # Normalize username
+            "username": normalize_string(employee_name).lower()  # Normalize and limit to 20 characters
         }
         tasks_data.append(task_dict)
 
