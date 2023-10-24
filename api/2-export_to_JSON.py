@@ -1,62 +1,61 @@
 #!/usr/bin/python3
 """
-2-export_to_JSON.py Script to export an employee's TODO list progress in JSON format.
-
-This script uses the requests module to make requests to the API endpoints for
-getting employee details and TODO list items. It then calculates the employee's
-TODO list progress and exports it to a JSON file in the specified format.
-
-USER_ID's value type is a list of dicts: OK
-
-Format must be: 
-{ "USER_ID": [
-    {"task": "TASK_TITLE", "completed": TASK_COMPLETED_STATUS, "username": "USERNAME"}, 
-    {"task": "TASK_TITLE", "completed": TASK_COMPLETED_STATUS, "username": "USERNAME"}, 
-    ... 
-]}
-
-Args:
-  employee_id: The integer employee ID.
-
-Returns:
-  None
+Export to json file
 """
 
 import json
 import requests
 import sys
 
-# Function to export TODO list data to a JSON file
-def export_to_JSON(user_id):
-    # Make a request to get employee's name from the API
-    employee_name = requests.get(
-        f"https://jsonplaceholder.typicode.com/users/{user_id}"
-    ).json()["username"]
-    
-    # Make a request to get employee's TODO list from the API
-    tasks = requests.get(
-        f"https://jsonplaceholder.typicode.com/users/{user_id}/todos"
-    ).json()
+# No execution when file is imported
+if __name__ == "__main__":
+    # Base URL for the REST API
+    base_url = "https://jsonplaceholder.typicode.com"
+    # Get the employee ID from the command-line argument
+    employee_id = sys.argv[1]
 
-    # Prepare the data in the specified format as a list of dictionaries
-    tasks_data = []
-    for task in tasks:
-        task_dict = {
-            "task": task["title"],
-            "completed": task["completed"],
+    # Fetch employee details
+    employee_url = "{}/users/{}".format(base_url, employee_id)
+    employee_response = requests.get(employee_url)
+    employee_data = employee_response.json()
+
+    if 'name' not in employee_data:
+        print("Employee not found.")
+        sys.exit(1)
+
+    employee_name = employee_data.get('username')
+
+    # Fetch employee's TODO list
+    todo_url = "{}/users/{}/todos".format(base_url, employee_id)
+    todo_response = requests.get(todo_url)
+    todo_data = todo_response.json()
+
+    # Calculate progress
+    total_tasks = len(todo_data)
+    completed_tasks = sum(1 for task in todo_data if task.get("completed"))
+
+    # Display progress
+    print("Employee {} is done with tasks({}/{}):".format(employee_name,
+                                                          completed_tasks, total_tasks))
+
+    # Display completed task titles
+    for task in todo_data:
+        if task.get("completed"):
+            formatted_task_title = "\t {}".format(task.get("title"))
+            print(formatted_task_title)
+
+    # Exporting to JSON
+    # Prepare data for JSON export
+    user_tasks = []
+    for task in todo_data:
+        task_data = {
+            "task": task.get("title"),
+            "completed": task.get("completed"),
             "username": employee_name
         }
-        tasks_data.append(task_dict)
+        user_tasks.append(task_data)
 
-    # Create a dictionary with USER_ID as key and list of dictionaries as value
-    output_data = {str(user_id): tasks_data}
-
-    # Write the data to a JSON file with USER_ID.json as the filename
-    with open(f"{user_id}.json", "w", encoding="UTF8", newline="") as f:
-        json.dump(output_data, f, indent=4)
-
-# Entry point of the script
-if __name__ == "__main__":
-    # Get the employee ID from the command-line argument and call the export function
-    export_to_JSON(sys.argv[1])
-
+    # Create a JSON file
+    output_filename = "{}.json".format(employee_id)
+    with open(output_filename, 'w') as json_file:
+        json.dump({employee_id: user_tasks}, json_file, indent=4)
