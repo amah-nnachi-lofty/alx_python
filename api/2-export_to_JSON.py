@@ -1,61 +1,35 @@
 #!/usr/bin/python3
 """
-Export to json file
+Python script to export data to a JSON file.
 """
 
 import json
 import requests
 import sys
 
-# No execution when file is imported
+
+def export_to_CSV(user_id):
+    employee_name = requests.get(
+        "https://jsonplaceholder.typicode.com/users/{}".format(user_id)
+    ).json()["username"]
+    tasks = requests.get(
+        "https://jsonplaceholder.typicode.com/users/{}/todos".format(user_id)
+    ).json()
+
+    tasks_data = {str(user_id): []}
+
+    for task in tasks:
+        tasks_data[str(user_id)].append(
+            {
+                "task": task["title"],
+                "completed": task["completed"],
+                "username": employee_name,
+            }
+        )
+
+    with open(str(user_id) + ".json", "w", encoding="UTF8", newline="") as f:
+        json.dump(tasks_data, f)
+
+
 if __name__ == "__main__":
-    # Base URL for the REST API
-    base_url = "https://jsonplaceholder.typicode.com"
-    # Get the employee ID from the command-line argument
-    employee_id = sys.argv[1]
-
-    # Fetch employee details
-    employee_url = "{}/users/{}".format(base_url, employee_id)
-    employee_response = requests.get(employee_url)
-    employee_data = employee_response.json()
-
-    if 'name' not in employee_data:
-        print("Employee not found.")
-        sys.exit(1)
-
-    employee_name = employee_data.get('username')
-
-    # Fetch employee's TODO list
-    todo_url = "{}/users/{}/todos".format(base_url, employee_id)
-    todo_response = requests.get(todo_url)
-    todo_data = todo_response.json()
-
-    # Calculate progress
-    total_tasks = len(todo_data)
-    completed_tasks = sum(1 for task in todo_data if task.get("completed"))
-
-    # Display progress
-    print("Employee {} is done with tasks({}/{}):".format(employee_name,
-                                                          completed_tasks, total_tasks))
-
-    # Display completed task titles
-    for task in todo_data:
-        if task.get("completed"):
-            formatted_task_title = "\t {}".format(task.get("title"))
-            print(formatted_task_title)
-
-    # Exporting to JSON
-    # Prepare data for JSON export
-    user_tasks = []
-    for task in todo_data:
-        task_data = {
-            "task": task.get("title"),
-            "completed": task.get("completed"),
-            "username": employee_name
-        }
-        user_tasks.append(task_data)
-
-    # Create a JSON file
-    output_filename = "{}.json".format(employee_id)
-    with open(output_filename, 'w') as json_file:
-        json.dump({employee_id: user_tasks}, json_file, indent=4)
+    export_to_CSV(sys.argv[1])
