@@ -47,11 +47,11 @@ def export_to_JSON(user_id):
         tasks_data.append(task_dict)
 
     # Create a dictionary with USER_ID as key and list of dictionaries as value
-    output_data = {str(user_id): tasks_data}
+    output_data = {str(user_id): sorted(tasks_data, key=lambda x: x["task"])}
 
     # Write the data to a JSON file with USER_ID.json as the filename
     with open(str(user_id) + ".json", "w", encoding="UTF8", newline="") as f:
-        json.dump(output_data, f, indent=4)
+        json.dump(output_data, f, indent=4, sort_keys=True)
 
 # Entry point of the script
 if __name__ == "__main__":
